@@ -4,7 +4,7 @@
 #include <deque>
 #include <vector>
 #define X 25
-#define Y 25
+
 using namespace std;
 class location
 {
@@ -19,35 +19,79 @@ location::location(int new_id, int new_dist)
 	distance=new_dist;
 }
 
-int BFS (int map[][Y], queue<int>&, int);
+int BFS (int map[][X],bool visit[], queue<int>&, int);
 
 int main (void)
 {
-	cout<<"Hello World "<<X<<" "<<Y<<endl;
-	int map[X][Y];
+//	cout<<"Hello World "<<X<<" "<<X<<endl;
+	int map[X][X];
+	bool visit[X];
 	queue<int> que;
 
-	for (int i=0;i<Y;i++)
+	for (int i=0;i<X;i++)
+	{
 		for (int j=0;j<X;j++)
 		{
 			int buffer;
 			cin>>buffer;
 			map[i][j]=buffer;
-		}
-BFS(map,que,1);
 
+		}
+		visit[i]=false;
+	}
+/* bfs call */
+cout<<"BFS: ";
+que.push(0);
+visit[0]=true;
+BFS(map,visit,que,0);
+/* dfs call */
+for (int i=0;i<X;i++)
+	visit[i]=false;
+cout<<endl<<"DFS: ";
 	return 0;
 }
 
-int BFS (int map[][Y], queue<int> &que, int position)
+int BFS (int map[][X], bool visit[], queue<int> &que, int position)
 {
-	for (int i=0;i<Y;i++)
-{
-	for (int j=0;j<X;j++)
+	string temp0;
+	cin>>temp0;
+	if (que.empty())
+		return 0;
+	else
 	{
-		cout<<map[i][j]<<"\t";
+		for (int j=0;j<X;j++)
+		{
+			if (map[position][j]!=0)
+			{
+				if (!visit[j])
+				{
+					que.push(j);
+					visit[j]=true;
+				}
+			}
+		}
+		int temp=que.front();
+		cout<<(que.front()+1)<<" ";
+		if ((que.front()+1)==X)
+		{
+			cout<<"heyo";
+			while (que.empty()!=true)
+				que.pop();
+		}
+		else
+		{
+			que.pop();
+		}
+			BFS(map,visit,que,temp);
 	}
-	cout<<endl;
-}
+/*	for (int i=0;i<X;i++)
+	{
+		for (int j=0;j<X;j++)
+		{
+			cout<<map[i][j]<<"\t";
+		}
+		cout<<endl;
+	}
+*/
 	return 0
 ;}
