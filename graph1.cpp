@@ -19,15 +19,15 @@ location::location(int new_id, int new_dist)
 	distance=new_dist;
 }
 
-int BFS (int map[][X],bool visit[], queue<int>&, int);
-
+int BFS (int map[][X],bool visit[],queue<int>&,int);
+int DFS (int map[][X],bool visit[],stack<int>&);
 int main (void)
 {
 //	cout<<"Hello World "<<X<<" "<<X<<endl;
 	int map[X][X];
 	bool visit[X];
 	queue<int> que;
-
+	stack<int> stak;
 	for (int i=0;i<X;i++)
 	{
 		for (int j=0;j<X;j++)
@@ -45,9 +45,15 @@ que.push(0);
 visit[0]=true;
 BFS(map,visit,que,0);
 /* dfs call */
+/* reset visit array */
 for (int i=0;i<X;i++)
 	visit[i]=false;
+stak.push(0);
+visit[0]=true;
 cout<<endl<<"DFS: ";
+cout.flush();
+DFS(map,visit,stak);
+cout<<endl;
 	return 0;
 }
 
@@ -74,7 +80,6 @@ int BFS (int map[][X], bool visit[], queue<int> &que, int position)
 		cout<<(que.front()+1)<<" ";
 		if ((que.front()+1)==X)
 		{
-			cout<<"heyo";
 			while (que.empty()!=true)
 				que.pop();
 		}
@@ -95,3 +100,37 @@ int BFS (int map[][X], bool visit[], queue<int> &que, int position)
 */
 	return 0
 ;}
+
+int DFS (int map[][X],bool visit[],stack<int> &stak)
+{
+	cout.flush();
+	if (stak.empty()==true)
+		return 0;
+	else
+	{
+		int temp=stak.top();
+		cout<<(stak.top()+1)<<" ";
+		if ((stak.top()+1)==X)
+		{	
+			while (stak.empty()!=true)
+				stak.pop();
+			visit[X]=true;
+			DFS(map,visit,stak);
+		}	
+		else
+		{
+			stak.pop();
+			for (int j=0;j<X;j++)
+			{
+				if (map[temp][j]!=0)
+					if (!visit[j])
+					{
+						stak.push(j);
+						visit[j]=true;
+					}
+			}
+			DFS(map,visit,stak);
+		}
+	}	
+	return 0;
+}
